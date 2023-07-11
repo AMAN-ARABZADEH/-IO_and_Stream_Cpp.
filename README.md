@@ -56,6 +56,10 @@ The `fileIOExample()` function provides an example of file input/output operatio
 Contributions are welcome! If you find any issues or have suggestions for improvement, please open an issue or submit a pull request. Feel free to expand the examples or add new ones to cover additional aspects of I/O and stream manipulation.
 
 
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
 
 
 Feel free to modify the content to better suit your needs.
