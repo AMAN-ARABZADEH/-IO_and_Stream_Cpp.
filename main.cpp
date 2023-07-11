@@ -5,75 +5,107 @@
 #include <iomanip>
 #include <fstream>
 #include <sstream>
-#include <vector>
+#include <limits>
 
-struct City{
-    std::string name;
-    size_t population;
-    double cost;
-};
-
-struct Country{
-    std::string name;
-    std::vector<City> cities;
-};
-
-struct Tours{
-    std::string title;
-    std::vector<Country> countries;
-};
-
-
-void printTours(const Tours& tours) {
-    std::cout << "Title: " << tours.title << std::endl;
-
-    for (const auto& country : tours.countries) {
-        std::cout << "Country: " << country.name << std::endl;
-
-        std::cout << std::left << std::setw(15) << "City" << std::setw(12) << "Population" << "Cost" << std::endl;
-        std::cout << std::setfill('-') << std::setw(40) << "" << std::setfill(' ') << std::endl;
-
-        for (const auto& city : country.cities) {
-            std::cout << std::left << std::setw(15) << city.name << std::setw(12) << city.population
-                      << std::fixed << std::setprecision(2) << city.cost << std::endl;
-        }
-
-        std::cout << std::endl;
-    }
+bool isInteger(const std::string& input) {
+    std::stringstream ss(input); // Create a stringstream object using the input string
+    int number;
+    return (ss >> number) && ss.eof(); // Check if extraction was successful and the stringstream is at the end of input
 }
 
+
+
 int main() {
+
 
     auto newLine = [](){
         std::cout << std::endl;
         std::cout << "Press Enter to continue: ";
         std::cin.get();
-        std::cout << std::endl;
-        std::cout << std::endl;
+        std::cout << "\n\n" ;
+
     };
+    double pi = 3.1415926535; // Full value of pi with 10 decimal places
+    // String Streams Example
 
-    Tours tours;
-    tours.title = "European Tour";
+    // String Streams Example
 
-    Country country1;
-    country1.name = "France";
-    country1.cities = {{"Paris", 2200000, 120.50}, {"Nice", 340000, 80.75}, {"Marseille", 860000, 95.25}};
+    int number1 = 42; // Initialize an integer variable 'number1' with the value 42
 
-    Country country2;
-    country2.name = "Italy";
-    country2.cities = {{"Rome", 2870000, 110.80}, {"Florence", 382000, 95.50}, {"Venice", 260000, 105.25}};
+    std::stringstream ss; // Create a string stream object 'ss'
 
-    tours.countries = {country1, country2};
+// Insert values into the string stream
+    ss << "The pi is: " << number1 << ", and pi is approximately: " << pi;
 
-    printTours(tours);
-    std::cout << std::endl;
+    std::string result = ss.str(); // Get the string value from the string stream using 'str()' method
+
+    std::cout << "Result is: " << result << std::endl; // Print the resulting string to the console
+
+
+
+
+
+    // A more useful example.
+    std::string input; // Variable to store the user input as a string
+    int number; // Variable to store the converted integer
+
+    while (true) { // Continue looping until a valid integer is entered
+        std::cout << "Enter an integer: "; // Prompt the user to enter an integer
+        std::getline(std::cin, input); // Read the entire line of user input
+
+        std::stringstream ss(input); // Create a stringstream object using the input string
+        if (ss >> number) { // Attempt to extract an integer from the stringstream
+            std::cout << "You entered: " << number << std::endl; // Print the entered integer
+            break; // Break out of the loop when a valid integer is entered
+        } else {
+            std::cerr << "Invalid input. Please enter an integer." << std::endl; // Print an error message for invalid input
+        }
+    }
+
+    /// Now another example using ostringstream,
+    std::cout << "\nNow another example using ostringstream\n";
+    std::ostringstream oss; // Create an ostringstream object
+
+    int number2 = 42;
+
+    std::string name = "John Doe";
+
+    // Insert values into the ostringstream
+    oss << "Number: " << number2 << ", Pi: " << pi << ", Name: " << name;
+
+    std::string result1 = oss.str(); // Get the resulting string from the ostringstream
+
+    std::cout << result1 << std::endl; // Print the resulting string
+
+
+    // Checker validator
+    std::string inputVal;
+    bool validInput = false;
+
+    do {
+        std::cout << "Validator of integer.\n";
+        std::cout << "Enter an integer: "; // Prompt the user to enter an integer
+        std::cin >> inputVal; // Read the user input
+
+        if (isInteger(inputVal)) { // Call the isInteger function to validate the input string
+            std::cout << "Valid integer input." << std::endl; // Print a success message if the input is a valid integer
+            validInput = true;
+        } else {
+            std::cout << "Invalid input. Not an integer." << std::endl; // Print an error message if the input is not a valid integer
+            std::cin.clear(); // Clear the error state of cin
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Discard the remaining characters in the buffer
+        }
+    } while (!validInput);
+
 
     newLine();
+
+
     // I/O Example
     int num;
     std::cout << "Enter a number: ";
     std::cin >> num;
-    std::cout << "You entered: " << num << std::endl;
+    std::cout << "You entered: " << num << "\n";
 
 
 
@@ -122,7 +154,6 @@ int main() {
 
      */
 
-        double pi = 3.1415926535; // Full value of pi with 10 decimal places
 
     // Default output: No stream manipulators are applied, so the default output format is used
         std::cout << "Default output: " << pi << std::endl;
@@ -207,36 +238,39 @@ int main() {
 
 
 
-    // File I/O Example
-    std::ofstream outputFile("output.txt");
-    if (outputFile.is_open()) {
-        outputFile << "Hello, World!" << std::endl;
-        outputFile.close();
-        std::cout << "File written successfully." << std::endl;
+// File I/O Example
+
+// The library #include <fstream> is used
+// Always close the file after you are done!
+// Read more here:  https://en.cppreference.com/w/cpp/io/basic_fstream
+//                  https://cplusplus.com/doc/tutorial/files/
+// Writing to a file
+    std::ofstream outputFile("output.txt"); // Create an output file stream object and open the file "output.txt"
+    if (outputFile.is_open()) { // Check if the file was opened successfully
+        outputFile << "Hello, World!" << std::endl; // Write the text "Hello, World!" to the file
+        outputFile << "Hello, C++!" << std::endl;
+        outputFile.close(); // Close the file
+        std::cout << "File written successfully." << std::endl; // Print a success message
     } else {
-        std::cerr << "Failed to open the file." << std::endl;
+        std::cerr << "Failed to open the file." << std::endl; // Print an error message if the file could not be opened
     }
 
-    std::ifstream inputFile("input.txt");
-    if (inputFile.is_open()) {
-        std::string line;
-        while (std::getline(inputFile, line)) {
-            std::cout << line << std::endl;
+// Reading from a file
+    std::ifstream inputFile("output.txt"); // Create an input file stream object and open the file "input.txt"
+    if (inputFile.is_open()) { // Check if the file was opened successfully
+        std::string line{};
+        // can also use !inputFile.eof(), indicating end of the file,
+        // Read more here:
+        // https://en.cppreference.com/w/cpp/io/basic_fstream
+        //while(!inputFile.eof()){
+        while (std::getline(inputFile, line)) { // Read each line from the file and store it in the variable 'line'
+            // std::getline(inputFile, line)
+            std::cout << line << std::endl; // Print the line to the console
         }
-        inputFile.close();
+        inputFile.close(); // Close the file
     } else {
-        std::cerr << "Failed to open the file." << std::endl;
+        std::cerr << "Failed to open the file." << std::endl; // Print an error message if the file could not be opened
     }
-
-    newLine();
-
-
-    // String Streams Example
-    int number1 = 42;
-    std::stringstream ss;
-    ss << "The pi is: " << number1 << ", and pi is approximately: " << pi;
-    std::string result = ss.str();
-    std::cout << result << std::endl;
 
     return 0;
 }
